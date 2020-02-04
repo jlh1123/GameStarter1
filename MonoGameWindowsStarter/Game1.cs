@@ -18,9 +18,7 @@ namespace MonoGameWindowsStarter
         Vector2 ballVelocity;
 
         Texture2D paddle;
-        Rectangle paddleRect;
 
-        int paddleSpeed = 0;
         KeyboardState oldKS;
         KeyboardState newKS;
 
@@ -29,6 +27,7 @@ namespace MonoGameWindowsStarter
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            paddle = new Paddle(this);
         }
 
         /// <summary>
@@ -50,10 +49,10 @@ namespace MonoGameWindowsStarter
             );
             ballVelocity.Normalize();
 
-            paddleRect.X = 0;
-            paddleRect.Y= 0;
-            paddleRect.Width = 50;
-            paddleRect.Height = 150;
+            //paddleRect.X = 0;
+            //paddleRect.Y= 0;
+            //paddleRect.Width = 50;
+            //paddleRect.Height = 150;
 
             base.Initialize();
         }
@@ -69,7 +68,7 @@ namespace MonoGameWindowsStarter
 
             // TODO: use this.Content to load your game content here
             ball = Content.Load<Texture2D>("ball");
-            paddle = Content.Load<Texture2D>("pixel");
+            paddle.LoadContent(Content);
         }
 
         /// <summary>
