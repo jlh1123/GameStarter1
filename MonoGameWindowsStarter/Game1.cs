@@ -12,12 +12,15 @@ namespace MonoGameWindowsStarter
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Random random = new Random();
-        Texture2D ball;
+
+        public int coinActive = 0;
+        public int Points = 0;
+        public Random Random = new Random();
+        Ball ball;
         Vector2 ballPosition = Vector2.Zero; //xy tracking
         Vector2 ballVelocity;
-
-        Texture2D paddle;
+        Coin coin;
+        Paddle paddle;
 
         KeyboardState oldKS;
         KeyboardState newKS;
@@ -28,6 +31,9 @@ namespace MonoGameWindowsStarter
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             paddle = new Paddle(this);
+            ball = new Ball(this);
+            coin = new Coin(this);
+
         }
 
         /// <summary>
@@ -42,12 +48,9 @@ namespace MonoGameWindowsStarter
             graphics.PreferredBackBufferWidth = 1042;
             graphics.PreferredBackBufferHeight = 768;
             graphics.ApplyChanges();
-
-            ballVelocity = new Vector2(
-                (float)random.NextDouble(),
-                (float)random.NextDouble()
-            );
-            ballVelocity.Normalize();
+            ball.Initialize();
+            paddle.Initialize();
+            coin.Initialize();
 
             //paddleRect.X = 0;
             //paddleRect.Y= 0;
@@ -61,14 +64,15 @@ namespace MonoGameWindowsStarter
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        protected override void LoadContent()   
+        protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            ball = Content.Load<Texture2D>("ball");
+            ball.LoadContent(Content);
             paddle.LoadContent(Content);
+            coin.LoadContent(Content);
         }
 
         /// <summary>
@@ -95,75 +99,30 @@ namespace MonoGameWindowsStarter
             {
                 Exit();
             }
-        
-           
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
             }
 
-            if(newKS.IsKeyDown(Keys.Up) && !oldKS.IsKeyDown(Keys.Up))
+            paddle.Update(gameTime);
+            ball.Update(gameTime);
+
+            if (paddle.bounds.CollidesWith(ball.bounds))
             {
-                paddleRect.Y -= 1;
-                paddleSpeed -= 1;
-                
-            }
-            if (newKS.IsKeyDown(Keys.Down) && !oldKS.IsKeyDown(Keys.Down))
-            {
-                paddleRect.Y += 1;
-                paddleSpeed += 1;
 
             }
 
-            paddleRect.Y += paddleSpeed;
+
+            oldKS = newKS;
+            base.Update(gameTime);
 
 
-            if(paddleRect.Y < 0)
-            {
-                paddleRect.Y = 0;
-            }
-            if (paddleRect.Y > GraphicsDevice.Viewport.Height - paddleRect.Height)
-            {
-                paddleRect.Y = GraphicsDevice.Viewport.Height - paddleRect.Height;
-            }
 
 
             // TODO: Add your update logic here
 
-            ballPosition += (float)gameTime.ElapsedGameTime.TotalMilliseconds  * ballVelocity;
 
-
-            if (ballPosition.Y < 0)
-            {
-                ballVelocity.Y *= -1;
-                float delta = 0 - ballPosition.Y;
-                ballPosition.Y += 2 * delta;
-            }
-
-            if (ballPosition.Y > graphics.PreferredBackBufferHeight - 100)
-            {
-                ballVelocity.Y *= -1;
-                float delta = graphics.PreferredBackBufferHeight - 100 - ballPosition.Y;
-                ballPosition.Y += 2 * delta; 
-            }
-
-            if (ballPosition.X < 0)
-            {
-                ballVelocity.X *= -1;
-                float delta = 0 - ballPosition.X;
-                ballPosition.X += 2 * delta;
-            }
-
-            if (ballPosition.X > graphics.PreferredBackBufferWidth - 100)
-            {
-                ballVelocity.X *= -1;
-                float delta = graphics.PreferredBackBufferWidth - 100 - ballPosition.X;
-                ballPosition.X += 2 * delta;
-            }
-
-
-            base.Update(gameTime);
         }
 
         /// <summary>
@@ -177,11 +136,35 @@ namespace MonoGameWindowsStarter
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             //spriteBatch.Draw(ball, new Rectangle(100, 100, 100, 100), Color.White);
-            spriteBatch.Draw(ball, new Rectangle((int)ballPosition.X, (int)ballPosition.Y, 100, 100), Color.White);
-            spriteBatch.Draw(paddle, paddleRect, Color.Black);
+            ball.Draw(spriteBatch);
+            paddle.Draw(spriteBatch);
             spriteBatch.End();
-            oldKS = newKS;
+
+
+            DrawCoin();
+
+            
+
+
+
+
             base.Draw(gameTime);
         }
+
+        public  void DrawCoin()
+        {
+            coin.Initialize();
+            spriteBatch.Begin();
+            coin.Draw(spriteBatch);
+            spriteBatch.End();
+            if ((paddle.bounds.CollidesWith(coin.bounds)))
+            {
+                spriteBatch.End();
+                Points++;
+            }
+
+
+        }
+
     }
 }

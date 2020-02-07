@@ -13,7 +13,7 @@ namespace MonoGameWindowsStarter
     class Paddle
     {
         Game1 game;
-        BoundingRectangle bounds;
+        public BoundingRectangle bounds;
         Texture2D texture;
 
         /// <summary>
@@ -23,51 +23,60 @@ namespace MonoGameWindowsStarter
         public Paddle(Game1 game)
         {
             this.game = game;
-            bounds.Width = 50;
-            bounds.Height = 200;
-            bounds.X = 0;
-            bounds.Y = game.GraphicsDevice.Viewport.Height/2 - bounds.Y/2;
-            
+        }
 
-
+        public void Initialize()
+        {
+          bounds.Width = 40;
+          bounds.Height = 40;
+          bounds.X = 0;
+          bounds.Y = 0;
         }
 
 
-        public void Update()
+
+
+
+
+
+        public void Update(GameTime gameTime)
         {
-            var newKS = Keyboard.GetState();
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            var keyboardState = Keyboard.GetState();
+
+
+            if(keyboardState.IsKeyDown(Keys.Up))
             {
-                Exit();
+                bounds.Y -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
+            if (keyboardState.IsKeyDown(Keys.Down))
+            {
+                bounds.Y += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
+            if(keyboardState.IsKeyDown(Keys.Left))
+            {
+              bounds.X -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
+            if(keyboardState.IsKeyDown(Keys.Right))
+            {
+              bounds.X += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             }
 
 
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (bounds.Y < 0)
             {
-                Exit();
+                bounds.Y = 0;
             }
-
-            if (newKS.IsKeyDown(Keys.Up) && !oldKS.IsKeyDown(Keys.Up))
+            if (bounds.Y > game.GraphicsDevice.Viewport.Height - bounds.Height)
             {
-                bounds.Y -= 1;
-                paddleSpeed -= 1;
-
+                bounds.Y = game.GraphicsDevice.Viewport.Height - bounds.Height;
             }
-            if (newKS.IsKeyDown(Keys.Down) && !oldKS.IsKeyDown(Keys.Down))
+            if(bounds.X < 0)
             {
-                paddleRect.Y += 1;
-                paddleSpeed += 1;
-
+              bounds.X = 0;
             }
-
-            if (paddleRect.Y < 0)
+            if(bounds.X > game.GraphicsDevice.Viewport.Width - bounds.Width)
             {
-                paddleRect.Y = 0;
-            }
-            if (paddleRect.Y > game.GraphicsDevice.Viewport.Height - paddleRect.Height)
-            {
-                paddleRect.Y = game.GraphicsDevice.Viewport.Height - paddleRect.Height;
+              bounds.X = game.GraphicsDevice.Viewport.Width - bounds.Width;
             }
 
 
@@ -82,13 +91,10 @@ namespace MonoGameWindowsStarter
 
         public void LoadContent(ContentManager Content)
         {
-            bounds.Width = 50;
-            bounds.Height = 200;
-            bounds.X = 0;
-            bounds.Y = game.GraphicsDevice.Viewport.Height / 2 - bounds.Y / 2;
+            texture = Content.Load<Texture2D>("pixel");
         }
 
-        
+
 
     }
 }
