@@ -111,12 +111,21 @@ namespace MonoGameWindowsStarter
             if (paddle.bounds.CollidesWith(ball.bounds))
             {
                 ball.Velocity *= -1;
+                Console.WriteLine("collided");
                 
             }
             if (paddle.bounds.CollidesWith(coin.bounds))
             {
                 Points++;
+                Console.WriteLine("+1 point");
 
+                double randX = Random.NextDouble();
+                double randY = Random.NextDouble();
+
+                randX = MathHelper.Lerp(0, GraphicsDevice.Viewport.Width, (float)randX);
+                randY = MathHelper.Lerp(0, GraphicsDevice.Viewport.Height, (float)randY);
+                coin.bounds.X = (float)randX;
+                coin.bounds.Y = (float) randY;
             }
 
             oldKS = newKS;
@@ -143,7 +152,7 @@ namespace MonoGameWindowsStarter
             //spriteBatch.Draw(ball, new Rectangle(100, 100, 100, 100), Color.White);
             ball.Draw(spriteBatch);
             paddle.Draw(spriteBatch);
-            
+            coin.Draw(spriteBatch);
             spriteBatch.End();
 
 

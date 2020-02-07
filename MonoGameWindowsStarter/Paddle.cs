@@ -27,7 +27,7 @@ namespace MonoGameWindowsStarter
 
         public void Initialize()
         {
-          bounds.Width = 40-+;
+          bounds.Width = 40;
           bounds.Height = 40;
           bounds.X = 0;
           bounds.Y = 0;
