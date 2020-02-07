@@ -25,7 +25,7 @@ namespace MonoGameWindowsStarter
         {
             bounds.Radius = 25;
 
-            bounds.X = game.GraphicsDevice.Viewport.Width / 2;
+            bounds.X = game.GraphicsDevice.Viewport.Width;
             bounds.Y = game.GraphicsDevice.Viewport.Height / 2;
 
             Velocity = new Vector2(

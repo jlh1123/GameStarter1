@@ -23,7 +23,7 @@ namespace MonoGameWindowsStarter
         {
             var closestX = Math.Max(Math.Min(c.X, r.X + r.Width), r.X);
             var closestY = Math.Max(Math.Min(c.Y, r.Y + r.Height), r.Y);
-            return (Math.Pow(c.Radius, 2) <= Math.Pow(closestX - c.X, 2) + Math.Pow(closestY - c.Y, 2));
+            return (Math.Pow(c.Radius, 2) >= Math.Pow(closestX - c.X, 2) + Math.Pow(closestY - c.Y, 2));
 
         }
 
