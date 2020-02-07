@@ -112,7 +112,7 @@ namespace MonoGameWindowsStarter
             {
                 ball.Velocity *= -1;
                 Console.WriteLine("collided");
-                
+                Exit();
             }
             if (paddle.bounds.CollidesWith(coin.bounds))
             {
