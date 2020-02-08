@@ -11,18 +11,42 @@ namespace MonoGameWindowsStarter
 {
     public class Coin
     {
-      Game1 game;
-      Texture2D texture;
-      public BoundingCircle bounds;
-      public Vector2 Position;
+        /// <summary>
+        /// game reference
+        /// </summary>
+        Game1 game;
 
-      public Coin(Game1 game)
-      {
-          this.game = game;
-      }
+        /// <summary>
+        /// texture reference
+        /// </summary>
+        Texture2D texture;
 
-      public void Initialize()
-      {
+        /// <summary>
+        /// bounds reference to check for collisions. 
+        /// </summary>
+        public BoundingCircle bounds;
+
+        /// <summary>
+        /// position of the coin
+        /// </summary>
+        public Vector2 Position;
+
+
+        /// <summary>
+        /// coin constructor 
+        /// </summary>
+        /// <param name="game">game reference.</param>
+        public Coin(Game1 game)
+        {
+            this.game = game;
+        }
+
+        
+        /// <summary>
+        /// initialize default values and sets the random starting position of the coin
+        /// </summary>
+        public void Initialize()
+        {
             bounds.Radius = 15;
 
             //Help for these next two lines came from: http://rbwhitaker.wikidot.com/random-number-generation   under "Generating Float Point Numbers" //
@@ -34,14 +58,22 @@ namespace MonoGameWindowsStarter
 
         }
 
-      public void LoadContent(ContentManager content)
-      {
-          texture = content.Load<Texture2D>("coin");
-      }
+        /// <summary>
+        /// load the content manager for the coin
+        /// </summary>
+        /// <param name="content"></param>
+        public void LoadContent(ContentManager content)
+        {
+            texture = content.Load<Texture2D>("coin");
+        }
 
-      public void Draw(SpriteBatch spriteBatch)
-      {
-        spriteBatch.Draw(texture, bounds, Color.Yellow);
-      }
+        /// <summary>
+        /// actually draws the doin.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, bounds, Color.Yellow);
+        }
     }
 }
