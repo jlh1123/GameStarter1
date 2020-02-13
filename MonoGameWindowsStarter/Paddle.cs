@@ -21,8 +21,6 @@ namespace MonoGameWindowsStarter
     class Paddle
     {
         Game1 game;
-        Vector2 startingPos = new Vector2(0, 0);
-        int frame;
         private DirectionFacing dirFacing = DirectionFacing.Up;
         public BoundingRectangle bounds;
         Texture2D texture;
@@ -60,27 +58,29 @@ namespace MonoGameWindowsStarter
             {
                 dirFacing = DirectionFacing.Up;
                 bounds.Y -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                
             }
             if (keyboardState.IsKeyDown(Keys.Down))
             {
                 dirFacing = DirectionFacing.Down;
                 bounds.Y += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                
             }
             if(keyboardState.IsKeyDown(Keys.Left))
             {
                 dirFacing = DirectionFacing.Left;
                 bounds.X -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+               
+
+
             }
-            if(keyboardState.IsKeyDown(Keys.Right))
+            if (keyboardState.IsKeyDown(Keys.Right))
             {
                 dirFacing = DirectionFacing.Right;
                 bounds.X += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                frame = (int)dirFacing;
+                
             }
-            else
-            {
-                dirFacing = DirectionFacing.Up;
-            }
+            
 
 
             if (bounds.Y < 0)
@@ -109,13 +109,12 @@ namespace MonoGameWindowsStarter
             
 
             var src = new Rectangle(
-                frame * FRAME_WIDTH,
-                (int)dirFacing % 4 * FRAME_HEIGHT,
+                (int)dirFacing * FRAME_WIDTH,
+                0,
                 FRAME_WIDTH,
                 FRAME_HEIGHT);
 
             sb.Draw(texture, bounds, src, Color.White);
-
         }
 
         public void LoadContent(ContentManager Content)
