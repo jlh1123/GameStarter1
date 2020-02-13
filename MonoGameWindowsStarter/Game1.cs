@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using System;
 
 namespace MonoGameWindowsStarter
 {
+
+    
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
@@ -12,18 +15,26 @@ namespace MonoGameWindowsStarter
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        public SoundEffect coinPickupSFX;
 
         public int coinActive = 0;
-        public int Points = 0;
+        private int Points = 0;
+        private SpriteFont font;
+
         public Random Random = new Random();
         Ball ball;
-        Vector2 ballPosition = Vector2.Zero; //xy tracking
-        Vector2 ballVelocity;
+        //Vector2 ballPosition = Vector2.Zero; //xy tracking
+        //Vector2 ballVelocity;
         Coin coin;
         Paddle paddle;
 
         KeyboardState oldKS;
         KeyboardState newKS;
+
+        
+        const int ANIMATION_FRAME_RATE = 124;
+        const int FRAME_WIDTH = 40;
+        const int FRAME_HEIGTH = 40;
 
 
         public Game1()
@@ -68,6 +79,8 @@ namespace MonoGameWindowsStarter
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>("Points");
+            coinPickupSFX = Content.Load<SoundEffect>("coinPickupSound");
 
             // TODO: use this.Content to load your game content here
             ball.LoadContent(Content);
@@ -116,6 +129,7 @@ namespace MonoGameWindowsStarter
             }
             if (paddle.bounds.CollidesWith(coin.bounds))
             {
+                coinPickupSFX.Play();
                 Points++;
                 Console.WriteLine("+1 point");
 
@@ -150,6 +164,8 @@ namespace MonoGameWindowsStarter
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             //spriteBatch.Draw(ball, new Rectangle(100, 100, 100, 100), Color.White);
+            spriteBatch.DrawString(font, "Points: " + Points, new Vector2(200, 200),Color.Black);
+
             ball.Draw(spriteBatch);
             paddle.Draw(spriteBatch);
             coin.Draw(spriteBatch);
