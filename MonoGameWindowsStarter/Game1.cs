@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using System.Collections;
 using System;
 
 namespace MonoGameWindowsStarter
@@ -16,8 +17,7 @@ namespace MonoGameWindowsStarter
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public SoundEffect coinPickupSFX;
-
-        public int coinActive = 0;
+        Queue _needToDraw;
         private int Points = 0;
         private SpriteFont font;
 
@@ -26,6 +26,8 @@ namespace MonoGameWindowsStarter
         //Vector2 ballPosition = Vector2.Zero; //xy tracking
         //Vector2 ballVelocity;
         Coin coin;
+
+        public int CoinsNeeded = 0;
         Paddle paddle;
 
         KeyboardState oldKS;
@@ -56,7 +58,7 @@ namespace MonoGameWindowsStarter
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            graphics.PreferredBackBufferWidth = 1042;
+            graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 768;
             graphics.ApplyChanges();
             ball.Initialize();
@@ -130,7 +132,7 @@ namespace MonoGameWindowsStarter
             if (paddle.bounds.CollidesWith(coin.bounds))
             {
                 coinPickupSFX.Play();
-                Points++;
+                Points += 1;
                 Console.WriteLine("+1 point");
 
                 double randX = Random.NextDouble();
@@ -163,19 +165,34 @@ namespace MonoGameWindowsStarter
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            //spriteBatch.Draw(ball, new Rectangle(100, 100, 100, 100), Color.White);
-            spriteBatch.DrawString(font, "Points: " + Points, new Vector2(200, 200),Color.Black);
 
+            spriteBatch.DrawString(font, "Points: " + Points, new Vector2(5, 5),Color.Black);
+            //spriteBatch.DrawString(font, "Player Coord X: " + paddle.playerPosition.X, new Vector2(10, 10), Color.Black);
+            //spriteBatch.DrawString(font, "Player Coord Y: " + paddle.playerPosition.Y, new Vector2(10, 30), Color.Black);
+            //spriteBatch.DrawString(font, "Viewport Width: " + GraphicsDevice.Viewport.Width, new Vector2(10, 60), Color.Black);
+            //spriteBatch.DrawString(font, "Viewport Height: " + GraphicsDevice.Viewport.Height, new Vector2(10, 90), Color.Black);
+            //spriteBatch.DrawString(font, "ball Coord X: " + ball.bounds.X, new Vector2(10, 120), Color.Black);
+            //spriteBatch.DrawString(font, "ball Coord Y: " + ball.bounds.Y, new Vector2(10, 150), Color.Black);
+            
+
+            spriteBatch.End();
+
+            var offset = new Vector2(450,300) - paddle.playerPosition;
+            var matrix = Matrix.CreateTranslation(offset.X, offset.Y, 0);
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, matrix);
             ball.Draw(spriteBatch);
             paddle.Draw(spriteBatch);
             coin.Draw(spriteBatch);
             spriteBatch.End();
 
+            
+            
+            
+           
 
             
-
             
-
 
 
 

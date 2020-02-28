@@ -16,8 +16,11 @@ namespace MonoGameWindowsStarter
         /// </summary>
         Game1 game;
 
+        
+        
+
         /// <summary>
-        /// texture reference
+        /// texture of coin
         /// </summary>
         Texture2D texture;
 
@@ -26,11 +29,7 @@ namespace MonoGameWindowsStarter
         /// </summary>
         public BoundingCircle bounds;
 
-        /// <summary>
-        /// position of the coin
-        /// </summary>
-        public Vector2 Position;
-
+       
 
         /// <summary>
         /// coin constructor 
@@ -38,6 +37,7 @@ namespace MonoGameWindowsStarter
         /// <param name="game">game reference.</param>
         public Coin(Game1 game)
         {
+            
             this.game = game;
         }
 
@@ -58,6 +58,8 @@ namespace MonoGameWindowsStarter
 
         }
 
+        
+
         /// <summary>
         /// load the content manager for the coin
         /// </summary>
@@ -73,7 +75,11 @@ namespace MonoGameWindowsStarter
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, bounds, Color.Yellow);
+            
+                spriteBatch.Draw(texture, bounds, Color.LightYellow);
+            
+            
+
         }
     }
 }

@@ -21,6 +21,7 @@ namespace MonoGameWindowsStarter
         /// </summary>
         Texture2D texture;
 
+        
         /// <summary>
         /// bounds to check for collisions
         /// </summary>
@@ -30,6 +31,8 @@ namespace MonoGameWindowsStarter
         /// Speed in a certain direction refrence variable
         /// </summary>
         public Vector2 Velocity;
+
+
 
 
         /// <summary>
