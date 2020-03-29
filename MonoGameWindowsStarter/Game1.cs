@@ -129,7 +129,7 @@ namespace MonoGameWindowsStarter
 
             //////////////////COIN
 
-            coinSparkTexture = Content.Load<Texture2D>("pixel");
+            coinSparkTexture = Content.Load<Texture2D>("pixelYellow");
             coinParticleSystem = new ParticleSystem(GraphicsDevice, 1000, coinSparkTexture);
             coinParticleSystem.SpawnPerFrame = 4;
 
@@ -159,7 +159,7 @@ namespace MonoGameWindowsStarter
 
             ///////////////////PLAYER TRAIL
 
-            playerParticleTexture = Content.Load<Texture2D>("pixel");
+            playerParticleTexture = Content.Load<Texture2D>("pixelWhite");
             playerParticleSystem = new ParticleSystem(GraphicsDevice, 1000, playerParticleTexture);
             playerParticleSystem.SpawnPerFrame = 16;
 
