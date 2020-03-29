@@ -16,8 +16,6 @@ namespace MonoGameWindowsStarter
         /// </summary>
         Game1 game;
 
-        
-        
 
         /// <summary>
         /// texture of coin

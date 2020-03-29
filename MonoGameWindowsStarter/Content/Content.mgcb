@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\bin\Windows\x86\Release\MonoGame.Framework.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
