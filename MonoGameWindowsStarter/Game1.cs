@@ -17,7 +17,6 @@ namespace MonoGameWindowsStarter
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public SoundEffect coinPickupSFX;
-        Queue _needToDraw;
         private int Points = 0;
         private SpriteFont font;
 
@@ -33,7 +32,18 @@ namespace MonoGameWindowsStarter
         KeyboardState oldKS;
         KeyboardState newKS;
 
-        
+
+        ParticleSystem smokeParticleSystem;
+        ParticleSystem coinParticleSystem;
+        ParticleSystem playerParticleSystem;
+        Texture2D smokeTexture;
+        Texture2D coinSparkTexture;
+        Texture2D playerParticleTexture;
+
+        Random rand = new Random();
+
+
+
         const int ANIMATION_FRAME_RATE = 124;
         const int FRAME_WIDTH = 40;
         const int FRAME_HEIGTH = 40;
@@ -88,6 +98,97 @@ namespace MonoGameWindowsStarter
             ball.LoadContent(Content);
             paddle.LoadContent(Content);
             coin.LoadContent(Content);
+
+            smokeTexture = Content.Load<Texture2D>("smoke");
+            smokeParticleSystem = new ParticleSystem(GraphicsDevice, 1000, smokeTexture);
+            smokeParticleSystem.SpawnPerFrame = 4;
+
+            // Set the SpawnParticle method
+            smokeParticleSystem.SpawnParticle = (ref Particle particle) =>
+            {
+              
+                particle.Position = new Vector2(ball.bounds.X, ball.bounds.Y);
+                particle.Velocity = new Vector2(
+                    MathHelper.Lerp(-50, 50, (float)rand.NextDouble()), // X between -50 and 50
+                    MathHelper.Lerp(0, 100, (float)rand.NextDouble()) // Y between 0 and 100
+                    );
+                particle.Acceleration = 0.1f * new Vector2(0, (float)-rand.NextDouble());
+                particle.Color = Color.Gold;
+                particle.Scale = 1f;
+                particle.Life = 1.0f;
+            };
+
+            // Set the UpdateParticle method
+            smokeParticleSystem.UpdateParticle = (float deltaT, ref Particle particle) =>
+            {
+                particle.Velocity += deltaT * particle.Acceleration;
+                particle.Position += deltaT * particle.Velocity;
+                particle.Scale -= deltaT;
+                particle.Life -= deltaT;
+            };
+
+            //////////////////COIN
+
+            coinSparkTexture = Content.Load<Texture2D>("pixel");
+            coinParticleSystem = new ParticleSystem(GraphicsDevice, 1000, coinSparkTexture);
+            coinParticleSystem.SpawnPerFrame = 4;
+
+            // Set the SpawnParticle method
+            coinParticleSystem.SpawnParticle = (ref Particle particle) =>
+            {
+
+                particle.Position = new Vector2(coin.bounds.X, coin.bounds.Y);
+                particle.Velocity = new Vector2(
+                    MathHelper.Lerp(-70, 70, (float)rand.NextDouble()), // X between -50 and 50
+                    MathHelper.Lerp(60, -60, (float)rand.NextDouble()) // Y between 0 and 100
+                    );
+                particle.Acceleration = 0.1f * new Vector2(0, (float)-rand.NextDouble()/2);
+                particle.Color = Color.Gold;
+                particle.Scale = 2f;
+                particle.Life = 0.85f;
+            };
+
+            // Set the UpdateParticle method
+            coinParticleSystem.UpdateParticle = (float deltaT, ref Particle particle) =>
+            {
+                particle.Velocity += deltaT * particle.Acceleration/10;
+                particle.Position += deltaT * particle.Velocity;
+                particle.Scale -= deltaT;
+                particle.Life -= deltaT;
+            };
+
+            ///////////////////PLAYER TRAIL
+
+            playerParticleTexture = Content.Load<Texture2D>("pixel");
+            playerParticleSystem = new ParticleSystem(GraphicsDevice, 1000, playerParticleTexture);
+            playerParticleSystem.SpawnPerFrame = 16;
+
+            // Set the SpawnParticle method
+            playerParticleSystem.SpawnParticle = (ref Particle particle) =>
+            {
+
+                particle.Position = new Vector2(paddle.bounds.X, paddle.bounds.Y);
+                particle.Velocity = new Vector2(
+                    MathHelper.Lerp(-5, 5, (float)rand.NextDouble()), // X between -50 and 50
+                    MathHelper.Lerp(-5, 5, (float)rand.NextDouble()) // Y between 0 and 100
+                    );
+                particle.Acceleration = 0.1f * new Vector2(0, (float)-rand.NextDouble());
+                particle.Color = Color.Gold;
+                particle.Scale = 2f;
+                particle.Life = 2.0f;
+            };
+
+            // Set the UpdateParticle method
+            playerParticleSystem.UpdateParticle = (float deltaT, ref Particle particle) =>
+            {
+                particle.Velocity += deltaT * particle.Acceleration;
+                particle.Position += deltaT * particle.Velocity;
+                particle.Scale -= deltaT;
+                particle.Life -= deltaT;
+            };
+
+
+
         }
 
         /// <summary>
@@ -106,8 +207,10 @@ namespace MonoGameWindowsStarter
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
-
+            smokeParticleSystem.Update(gameTime);
+            coinParticleSystem.Update(gameTime);
+            playerParticleSystem.Update(gameTime);
+            
             newKS = Keyboard.GetState();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -173,14 +276,16 @@ namespace MonoGameWindowsStarter
             //spriteBatch.DrawString(font, "Viewport Height: " + GraphicsDevice.Viewport.Height, new Vector2(10, 90), Color.Black);
             //spriteBatch.DrawString(font, "ball Coord X: " + ball.bounds.X, new Vector2(10, 120), Color.Black);
             //spriteBatch.DrawString(font, "ball Coord Y: " + ball.bounds.Y, new Vector2(10, 150), Color.Black);
-            
+            smokeParticleSystem.Draw();
+            coinParticleSystem.Draw();
+            playerParticleSystem.Draw();
 
-            spriteBatch.End();
+            //spriteBatch.End();
 
-            var offset = new Vector2(450,300) - paddle.playerPosition;
-            var matrix = Matrix.CreateTranslation(offset.X, offset.Y, 0);
+            //var offset = new Vector2(450,300) - paddle.playerPosition;
+            //var matrix = Matrix.CreateTranslation(offset.X, offset.Y, 0);
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, matrix);
+            //spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, matrix);
             ball.Draw(spriteBatch);
             paddle.Draw(spriteBatch);
             coin.Draw(spriteBatch);
