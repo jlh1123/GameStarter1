@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 namespace MonoGameWindowsStarter
@@ -21,13 +22,13 @@ namespace MonoGameWindowsStarter
         private SpriteFont font;
 
         public Random Random = new Random();
-        Ball ball;
+        public Ball ball;
         //Vector2 ballPosition = Vector2.Zero; //xy tracking
         //Vector2 ballVelocity;
-        Coin coin;
+        public Coin coin;
 
         public int CoinsNeeded = 0;
-        Paddle paddle;
+        public  Paddle paddle;
 
         KeyboardState oldKS;
         KeyboardState newKS;
@@ -68,8 +69,8 @@ namespace MonoGameWindowsStarter
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            graphics.PreferredBackBufferWidth = 1024;
-            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferHeight = 480;
             graphics.ApplyChanges();
             ball.Initialize();
             paddle.Initialize();
@@ -96,8 +97,8 @@ namespace MonoGameWindowsStarter
 
             // TODO: use this.Content to load your game content here
             ball.LoadContent(Content);
-            paddle.LoadContent(Content);
             coin.LoadContent(Content);
+            paddle.LoadContent(Content);
 
             smokeTexture = Content.Load<Texture2D>("smoke");
             smokeParticleSystem = new ParticleSystem(GraphicsDevice, 1000, smokeTexture);
@@ -187,6 +188,63 @@ namespace MonoGameWindowsStarter
                 particle.Life -= deltaT;
             };
 
+            
+
+            var backgroundTexture = Content.Load<Texture2D>("mountainBACK1");
+            var backgroundSprite = new StaticSprite(backgroundTexture);
+            var backgroundLayer = new ParallaxLayer(this);
+            backgroundLayer.Sprites.Add(backgroundSprite);
+            backgroundLayer.DrawOrder = 0;
+            Components.Add(backgroundLayer);
+
+
+            var cloudTexture = Content.Load<Texture2D>("clouds2");
+            var cloudSprite = new StaticSprite(cloudTexture);
+            var cloudLayer = new ParallaxLayer(this);
+            cloudLayer.Sprites.Add(cloudSprite);
+            cloudLayer.DrawOrder = 1;
+            Components.Add(cloudLayer);
+
+
+            var landTexture = Content.Load<Texture2D>("land3");
+            var landSprite = new StaticSprite(landTexture);
+            var landLayer = new ParallaxLayer(this);
+            landLayer.Sprites.Add(landSprite);
+            landLayer.DrawOrder = 2;
+            Components.Add(landLayer);
+
+            var topBTexture = Content.Load<Texture2D>("topbleachers4");
+            var topBSprite = new StaticSprite(topBTexture);
+            var topBLayer = new ParallaxLayer(this);
+            topBLayer.Sprites.Add(topBSprite);
+            topBLayer.DrawOrder = 3;
+            Components.Add(topBLayer);
+
+            var midBTexture = Content.Load<Texture2D>("middlebleachers5");
+            var midBSprite = new StaticSprite(midBTexture);
+            var midBLayer = new ParallaxLayer(this);
+            midBLayer.Sprites.Add(midBSprite);
+            midBLayer.DrawOrder = 4;
+            Components.Add(midBLayer);
+
+            var botBTexture = Content.Load<Texture2D>("bottombleachers6");
+            var botBSprite = new StaticSprite(botBTexture);
+            var botBLayer = new ParallaxLayer(this);
+            botBLayer.Sprites.Add(botBSprite);
+            botBLayer.DrawOrder = 5;
+            Components.Add(botBLayer);
+
+            
+
+
+
+            backgroundLayer.ScrollController = new PlayerTrackingScrollController(paddle, 0.1f);
+            cloudLayer.ScrollController = new PlayerTrackingScrollController(paddle, 0.2f);
+            landLayer.ScrollController = new PlayerTrackingScrollController(paddle, 0.4f);
+            topBLayer.ScrollController = new PlayerTrackingScrollController(paddle, 0.6f);
+            midBLayer.ScrollController = new PlayerTrackingScrollController(paddle, 0.8f);
+            botBLayer.ScrollController = new PlayerTrackingScrollController(paddle, 1.0f);
+            
 
 
         }
@@ -287,8 +345,8 @@ namespace MonoGameWindowsStarter
 
             //spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, matrix);
             ball.Draw(spriteBatch);
-            paddle.Draw(spriteBatch);
             coin.Draw(spriteBatch);
+            paddle.Draw(spriteBatch);
             spriteBatch.End();
 
             

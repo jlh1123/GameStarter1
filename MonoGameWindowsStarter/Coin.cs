@@ -65,6 +65,7 @@ namespace MonoGameWindowsStarter
         public void LoadContent(ContentManager content)
         {
             texture = content.Load<Texture2D>("coin");
+            
         }
 
         /// <summary>
@@ -79,5 +80,7 @@ namespace MonoGameWindowsStarter
             
 
         }
+
+       
     }
 }
